@@ -72,6 +72,39 @@ day_name = dt.today().strftime("%A")
 highest_player_string = str(highest_scorer) + " (" + str(highest_scorer_team) + "): " + str(int(get_highest_player_week(box).points)) + " points"
 
 
+# WEEKLY SCORES
+# return all scores for the week
+# def get_scores(box):
+#     scores = []
+#     for game in box:
+#         scores.append(str(game.home_team.team_abbrev) + ": " + str(game.home_score) + " points")
+#         scores.append(str(game.away_team.team_abbrev) + ": " + str(game.away_score) + " points")
+
+#     return scores
+
+matchups = []
+def get_matchups_with_score(box):
+    
+    for game in box:
+        # add new line for each game
+        matchups.append(str(game.home_team.team_abbrev) + " vs " + str(game.away_team.team_abbrev) + ": " + str(int(game.home_score)) + "-" + str(int(game.away_score)))
+    for i in range(len(matchups)):
+        # print(matchups[i])
+        scores_string = str(matchups[i])
+
+    return matchups, scores_string
+
+
+get_matchups_with_score(box)
+
+def list_to_string(matchups):
+    # initialize an empty string
+    str1 = ""
+    # return string
+    return ('\n'.join(matchups))
+
+scores_string = list_to_string(matchups)
+
 # calculate team with most wins
 
 
@@ -80,7 +113,9 @@ highest_player_string = str(highest_scorer) + " (" + str(highest_scorer_team) + 
 # concatenate into tweet string
 tweet_string = "Weekly Leaders:\n\n" + highest_team_string + "\n" +  highest_player_string
 
-# print(tweet_string)
+tweet_string_score = "Scores:\n\n" + scores_string
+
+# print(tweet_string_score)
 
 # for player in box[0].home_lineup:
 #     print(player.name  + '\t' + str(int(player.points)))

@@ -29,6 +29,8 @@ mention_id = 1
 
 words = ["stats", "fantasy"]
 
+words_score = ["score", "score", "matchup"]
+
 
 while True:
     # exec(open('espn.py').read())
@@ -47,7 +49,15 @@ while True:
                     print("replied")
                 except Exception as exc:
                     print(exc)
-                
+            if True in [word in mention.text.lower() for word in words_score]:
+                try:
+                    print("attempting to reply")
+                    api.update_status("@" + str(mention.author.screen_name) + " " + tweet_string_score, in_reply_to_status_id = mention.id)
+                    print("replied")
+                except Exception as exc:
+                    print(exc)
+
+
     time.sleep(15)
 
 
