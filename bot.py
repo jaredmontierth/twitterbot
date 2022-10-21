@@ -29,7 +29,7 @@ mention_id = 1
 
 words = ["stats", "fantasy"]
 
-words_score = ["score", "score", "matchup"]
+words_score = ["score", "scores", "matchup"]
 
 
 while True:
