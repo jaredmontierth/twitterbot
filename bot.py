@@ -1,3 +1,4 @@
+from datetime import datetime
 import tweepy
 from keysproton import *
 from espn import *
@@ -37,6 +38,10 @@ while True:
 
     mentions = api.mentions_timeline(since_id = mention_id)
     for mention in mentions:
+        
+        if time.time()-mention.created_at.timestamp() > 15:
+            continue
+
         print("found mentioned tweet")
         print(f"{mention.author.screen_name}: {mention.text}")
         mention_id = mention.id
