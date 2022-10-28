@@ -30,7 +30,86 @@ words_score = ["score", "scores", "matchup"]
 
 words_top = ["top", "top5", "top 5", "topfive", "top five"]
 
+
 while True:
+
+    # reconstruct tweet strings
+
+    highest_team_string = str(get_highest_team(box).team_name).strip() + ": " + str(
+    int(get_highest_team_score(box))) + " points"
+
+    highest_scorer = get_highest_player_week(box).name
+    highest_scorer_team = get_player_team(get_highest_player_week(box).playerId).team_abbrev
+
+
+    highest_player_string = str(highest_scorer) + " (" + str(highest_scorer_team) + "): " + str(
+        int(get_highest_player_week(box).points)) + " points"
+
+    matchups = []
+
+    def get_matchups_with_score(box):
+        for game in box:
+            # add new line for each game
+            matchups.append(str(game.home_team.team_abbrev) + " vs " + str(game.away_team.team_abbrev) + ": " + str(
+                int(game.home_score)) + "-" + str(int(game.away_score)))
+        for i in range(len(matchups)):
+            # print(matchups[i])
+            scores_string = str(matchups[i])
+
+        return matchups, scores_string
+
+
+    get_matchups_with_score(box)
+
+
+    def list_to_string(matchups):
+        # initialize an empty string
+        str1 = ""
+        # return string
+        return ('\n'.join(matchups))
+
+
+    scores_string = list_to_string(matchups)
+
+    # calculate the top five highest scoring players of the week
+
+    def get_top_five(box):
+        top_five = []
+        for game in box:
+            for player in game.home_lineup:
+                top_five.append(player)
+            for player in game.away_lineup:
+                top_five.append(player)
+        top_five.sort(key=lambda x: x.points, reverse=True)
+        return top_five[:5]
+
+    # get the team of the top five highest scoring players of the week
+
+    def get_top_five_team_abbrev(player_name):
+        for team in league.teams:
+            for player in team.roster:
+                if player.name == player_name:
+                    return team.team_abbrev
+
+
+    top_five = get_top_five(box)
+
+
+    top_five_string = ""
+    for player in top_five:
+        top_five_string += str(player.name) + " (" + str(get_top_five_team_abbrev(player.name)) + "): " + str(
+            int(player.points)) + " points\n"
+
+
+    # concatenate into tweet string
+
+    tweet_string_top_five = "Top 5 scorers this week:\n\n" + top_five_string
+
+    tweet_string = "Weekly Leaders:\n\n" + highest_team_string + "\n" + highest_player_string
+
+    tweet_string_score = "Scores:\n\n" + scores_string    
+
+    # listen for mentions
 
     mentions = api.mentions_timeline(since_id=mention_id)
     for mention in mentions:
@@ -72,16 +151,4 @@ while True:
 
 
     time.sleep(15)
-
-
-
-
-
-
-
-
-
-
-
-
 
